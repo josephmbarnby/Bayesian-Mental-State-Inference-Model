@@ -1,0 +1,210 @@
+---
+title: "HISI Model Demo"
+author: "Barnby, J.M. & Moutoussis, M."
+date: "23/12/2021"
+output: html_document
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+## Load Files and packages
+
+```{r load files and packages, echo = F}
+
+rm(list = ls())
+
+source('HISI_modeltoolkit.R')
+library(matlab)
+library(R.matlab)
+library(tidyverse)
+library(tidyquant)
+library(ggcorrplot)
+library(doParallel)
+library(foreach)
+library(DEoptim)
+```
+
+## Understanding the model
+
+The anatomy of the HISI model.
+
+![Experimental Design](ModelSchematic.png)
+
+## Here is the model
+
+```{r}
+
+# Give it some fake decisions from a partner
+data = data.frame(ret = c(sample(c(0.5, 0), 10, replace = T, prob = c(0.8, 0.2)),
+                   sample(c(0.5, 0), 10, replace = T, prob = c(0.2, 0.8))),
+                  HI = rep(0.5, 20),
+                  SI = rep(0.5, 20))
+
+# Give it some parameters
+parameters <- c(0.5, 2, 0.5, 4, 1, 0, 0.5, 2, 0.5)
+
+# Run the model 
+xy <- infHISIll_20d(parameters, data, details = T, tn = 10, phase = 2, plot = 1, sim_only = 1)
+
+#Look at the data
+xy$policy
+
+```
+
+## Understanding the functions
+
+An anatomy of the HISI model wrapper: NB not intended for running
+
+```{r, results='hide'}
+
+simulatedata_HISI(
+
+  x = 'none',            # As default, this will tell the function you want to input specific parameters
+                         # You can set the string to a particular parameter if you want to test multiple
+                         # values of that parameter, e.g. change it to 'wSI'
+   
+  values = 10,           # If you want to sweep through a parameter, how many values do you want to test?
+   
+  samples = 100,         # How many synthetic participants do you want to produce per sweep?
+   
+  trials = 50,           # How many trials do you want to include? If you set 'partners' > 1, this is will the
+                         # the amount of trials per partner (e.g. partner = 2, and you set 50 trials, so there will
+                         # be 100 trials simulated in total, 50 per partner type)
+   
+  partners = 2,          # How many partners are the synthetic participants playing? Can be between 1-3
+
+  partner_type = 'fair', # If the synthetic participants are only with one partner, which one should they 
+                         # be matched with?   Can be 'fair', 'unfair' or 'random'.
+
+  plot = 1               # Do you want to visualize the output? The function will return simulated data as standard,
+                         # and then also a plot of the data over time if you set plot = 1.
+  
+  #...                   # There are default parameter values set within the function:
+                         # pHI0 = 0.5, uHI0 = 2, pSI0 = 0.5, uSI0 = 2, uPi = 2, w0 = 0, wHI = 0.5, wSI = 0.5, eta = 0.5
+                         # If you want to change these values, simply add extra arguments, e.g.:
+                         # pHI0 = 0.9, uHI0 = 5.
+                         # If x = 'none' this is where you define your specific parameters of interest to simulate
+)
+
+```
+
+## Simulating some data
+
+Here I am asking the function to sweep through 10 different values of
+pHI0 between 0 and 1 but keep all other parameters constant. I want 100
+participants to be simulated per values. I am also asking for the
+participants to play 2 'types' of partner, and the function will
+simulate each presented order (i.e., fair -> unfair, and unfair ->
+fair).
+
+```{r, echo = F}
+
+simulatedata_HISI(x = 'pHI0', values = 10, samples = 100, trials = 10, partners = 2, plot = 1, upi = 0.9)
+
+```
+
+Here I am asking for the same but I only want to save the data without
+plotting
+
+```{r}
+
+mytestdata <- simulatedata_HISI(x = 'pHI0', values = 10, samples = 100, trials = 10, partners = 2, plot = 0)
+mytestdata
+
+```
+
+In this particular version, I want to only play one type of partner, and
+they'll be giving the participants randomly fair or unfair outcomes. I
+am also setting the uHI0 parameter to 5 while I sweep through pHI0
+values
+
+```{r}
+
+simulatedata_HISI(x = 'upi01', 
+                  values = 10, 
+                  samples = 100, 
+                  trials = 50, 
+                  partners = 1, 
+                  partner_type = 'unfair', 
+                  plot = 1,
+                  uHI0 = 5)
+```
+
+Finally I want to simulate three different partners, but with specific parameters set
+
+```{r}
+
+simulatedata_HISI(x = 'pHI0', values = 10, samples = 50, trials = 50, partners = 3, plot = 1,
+                  uHI0 = 2,
+                  pSI0 = 0.3,
+                  uSI0 = 2,
+                  upi  = 0.9,
+                  w0   = -1,
+                  wHI  = 0.5,
+                  wSI  = 0.5,
+                  eta  = 1)
+
+```
+
+# Recover the model
+
+This recovery function samples random parameter values from normal
+distributions and then attempts to recover them using simulated data
+produced from the sampled parameters.
+
+This uses weak regularizing priors over the optimizer, providing Maximum
+A-Priori estimation. The optimiser used 'DEoptim' - a differential evolution
+algorithm, which behaves a little like expectation maximisation algorithms.
+
+```{r Recovery}
+
+cores = 4
+RecoverModel_HISI(
+  variations = 150,          # how many samples of parameters need to be drawn from a normal distribution?
+  trials = 10,               # how many trials will the synthetic participants play with each partner?
+  partners = 2,              # how many partners/styles of partner will they see?
+  partner_type = 'fair',     # if partner = 1, what type of partner will they see?
+  corrplot = 1,              # do you want to see a correlation of the parameters at the end?,
+  n_cores = cores
+
+)
+
+```
+
+# Fitting some data
+
+This fitting function allows Maximum-A-Priori (MAP) approximation for
+all parameters within the model, using a differential evolution optimiser.
+
+This works best with larger populations (\> 100) to reduce estimation
+noise across the entire group.
+
+The data input needs to be a list, with each entry being a participants
+returns for each trial, and their harmful intent and self interest
+attributions, and trial number, in that order. E.g:
+
+| Return | Harmful Intent | Self Interest | Trial |
+|:------:|:--------------:|:-------------:|:-----:|
+| 0.5    | 50             | 50            | 1     |
+| 0      | 60             | 65            | 2     |
+| 0      | 60             | 70            | 3     |
+| ...    | ...            | ...           | n     |
+
+I am working on a hierarchical implementation to fit the model, although this is a WIP. 
+Please get in touch if you'd like to help with this!
+
+## Fit model to data using MAP appoximation
+
+```{r}
+
+load('ExampleData.Rdata')
+ 
+#Fit the model using MAP estimation and visualize the distributions of parameters and quality of model fit
+Fitted_Values <- FitModel_HISI(ExampleData, plot = 1, cores = 4, tn = 10, phase = 2)
+
+Fitted_Values[[1]] # This is the data with estimated parameters
+Fitted_Values[[2]] # This is the simulated data using the parameters from Fitted_Values[[1]]
+Fitted_Values[[3]] # These are the plots to check the parameter approximation and overall model fit
+
+```
