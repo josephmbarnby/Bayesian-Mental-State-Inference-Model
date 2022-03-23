@@ -13,6 +13,7 @@ NB: Current tookit uses Differential Evolution Optimisation to fit and recover m
 Currently in development: 
 
   - Hierarchical fitting
+  - Development of these scripts as an R and Python package
 
 ![Schematic](ModelSchematic.png)
 
