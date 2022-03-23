@@ -15,10 +15,11 @@ Currently in development:
   - Hierarchical fitting
   - Development of these scripts as an R and Python package
 
+### Anatomy of the model
+
 ![Schematic](ModelSchematic.png)
 
 ## Brief overview of functions
-
 
 #### Simulate some data
 
