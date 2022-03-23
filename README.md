@@ -100,6 +100,6 @@ Fitted_Values[[3]] # These are the plots to check the parameter approximation an
 The output of this function shows (in addition to the raw data):
 - (A) Distribution of individually fitted parameters from the data
 - (B) Distribution of the loglikelihood values for each participant (which demonstrates model fit). NB: If the model was simply 'guessing' without any explanatory power, we would expect the loglikelihood values to cluster around -87.88 (the vertical solid line on the plot). This line will change depending on the amount of trials - for example - for 100 trials the loglikelihood of a randomly performing model would be -439.44.
-- (C) The simulated (solid black line) and real data (dotted line with coloured ribbon) for harmful intent (orange) and self interest (purple). This is important to quantify the generative performance of the model on your data and assess whether it can accurately reproduce the real behavioural results, thereby demonstrating generative validity (Palminteri et al., 2017).
+- (C) The simulated (solid black line) and real data (dotted line with coloured ribbon) for harmful intent (orange) and self interest (purple). This is important to quantify the generative performance of the model on your data and assess whether it can accurately reproduce the real behavioural results, thereby demonstrating generative validity (Palminteri et al., 2017). In this plot, the data is also faceted by whether a participant saw a fair partner first, or an unfair partner first. 
 
 ![Schematic](ExampleStills/Fitting.png)
