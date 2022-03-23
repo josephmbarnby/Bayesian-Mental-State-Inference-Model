@@ -28,8 +28,10 @@ White nodes represent free parameters of the model. Grey shaded nodesrepresent n
 Sweep through a series of values of one parameters to assess it's contribution to attributional dynamics
 
 ```{r}
-simulatedata_HISI(x = 'pHI0', values = 10, samples = 100, trials = 10, partners = 2, plot = 1, upi = 0.9)
+simulatedata_HISI(x = 'pHI0', values = 10, samples = 100, trials = 10, partners = 2, plot = 1)
 ```
+
+Here, we've simulated 10 different values of pHI0, each with 100 synthetic participants, over 20 trials with 2 partners.
 
 ![Schematic](ExampleStills/Simulation1.png)
 
@@ -39,6 +41,7 @@ Alternatively, set parameters to be specific values
 simulatedata_HISI(x = 'pHI0', values = 10, samples = 100, trials = 50, partners = 2, plot = 1,
                   uHI0 = 2, pSI0 = 0.3, uSI0 = 2, upi  = 0.9, w0   = -1, wHI  = 0.5, wSI  = 0.5, eta  = 1)
 ```
+Here, we've simulated 10 different values of pHI0, each with 100 synthetic participants, over 50 trials with 2 partners.
 
 ![Schematic](ExampleStills/Simulation2.png)
 
