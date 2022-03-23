@@ -14,6 +14,8 @@ Currently in development:
 
   - Hierarchical fitting
 
+![Schematic](ModelSchematic.png)
+
 ## Brief overview of functions
 
 
