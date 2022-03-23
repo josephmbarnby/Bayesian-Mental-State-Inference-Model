@@ -17,7 +17,7 @@ Currently in development:
 
 ### Anatomy of the model
 
-![Schematic](ModelSchematic.png)
+![Schematic](ExampleStills/ModelSchematic.png)
 
 White nodes represent free parameters of the model. Grey shaded nodesrepresent numerical probability matrices built from free parameters. Thick solid and thick dotted lines represent transitions between trials. Thin solid lines represent the causal influence of a nodeon another node or variable. The agent or participant updates their initial beliefs (starting prior) about the partner’s intentions [p(HI, SI)_t=0] each trial using their policy matrix of the partner [pi] which maps the likelihood between a partner’s return to the participant and the partner’s true intentions. We assume that upon detecting a change (e.g. a reversal or a new participant), participants re-set their beliefs, using their priors about people in general (thin dotted line), biased by what they have learnt already about their present partner [eta]. Both the policy matrix and initial beliefs about the partner are numerical matrices that assigned probabilities to each grid point of values of harmful intent (0-1) and self-interest (0-1). The model can be used to simulate observed attributions of intent given a series of returns, or inverted to infer the parameter values for participants, using experimentally observed attributions.
 
@@ -31,12 +31,16 @@ Sweep through a series of values of one parameters to assess it's contribution t
 simulatedata_HISI(x = 'pHI0', values = 10, samples = 100, trials = 10, partners = 2, plot = 1, upi = 0.9)
 ```
 
+![Schematic](ExampleStills/Simulation1.png)
+
 Alternatively, set parameters to be specific values
 
 ```{r}
 simulatedata_HISI(x = 'pHI0', values = 10, samples = 100, trials = 50, partners = 2, plot = 1,
                   uHI0 = 2, pSI0 = 0.3, uSI0 = 2, upi  = 0.9, w0   = -1, wHI  = 0.5, wSI  = 0.5, eta  = 1)
 ```
+
+![Schematic](ExampleStills/Simulation2.png)
 
 ### Recover the model
 
@@ -53,6 +57,7 @@ RecoverModel_HISI(
   n_cores = cores
 )
 ```
+![Schematic](ExampleStills/Recovery.png)
 
 ### Fitting some data
 
@@ -85,3 +90,4 @@ Fitted_Values[[2]] # This is the simulated data using the parameters from Fitted
 Fitted_Values[[3]] # These are the plots to check the parameter approximation and overall model fit
 
 ```
+![Schematic](ExampleStills/Fitting.png)
