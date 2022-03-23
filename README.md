@@ -1,5 +1,5 @@
 # Bayes-Belief Social Attribution Model
-Model tutorial and code for the Bayesian Belief social inference model reported in Barnby et al., (2020) &amp; Barnby et al., (2022)
+Model tutorial and code for the Bayesian Belief social inference model reported in Barnby et al., (2020) &amp; Barnby et al., (2022). Software developed by Joe Barnby & Michael Moutoussis.
 
 Papers using this model: 
 
