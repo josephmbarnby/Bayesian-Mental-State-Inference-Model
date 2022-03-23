@@ -525,14 +525,14 @@ RecoverModel_HISI <- function(variations = 100,
           L          <- NA;
 
           dat          <- data_sim[[pt]][,c(2, 9:10)]
-          #opt <- list(NP=500,itermax=100, storepopfrom=1, storepopfreq=1)
           lwr = 0.01
           fitAttempt   <- try(DEoptim(
                                  fn = msLPhisi_20d,
                                  datAr = dat,
                                  scbeta0 = -1,
                                  lower = c(rep(lwr, 5), -10, rep(lwr, 3)),
-                                 upper = c(1, 8, 1, 8, 1, 10, 1, 1, 1)))
+                                 upper = c(1, 8, 1, 8, 1, 10, 1, 1, 1),
+                                 DEoptim.control(trace =F)))
           if(inherits(fitAttempt, "try-error"))
           {
             #error handling code
@@ -715,20 +715,20 @@ FitModel_HISI <- function(    data = ExampleData,
                         aes(`Values (Arbitary Units)`, Parameters, fill = Parameters))+
 
   ggridges::geom_density_ridges(stat = "binline",
-                                bins = 40,
+                                bins = 100,
                                 scale = 0.95,
                                 draw_baseline = FALSE,
                                 color = 'black')+
   scale_y_discrete(labels = c(
-        pHI0_rec      = paste(expression(pHI[0])),
-        uHI0_rec      = paste(expression(uHI[0])),
-        pSI0_rec      = paste(expression(pSI[0])),
-        uSI0_rec      = paste(expression(uSI[0])),
-        upi_rec       = paste(expression(u[pi])),
-        w0_rec        = paste(expression(w[0])),
-        wHI_rec       = paste(expression(w[HI])),
-        wSI_rec       = paste(expression(w[SI])),
-        eta_rec       = paste(expression(eta))
+        pHI0_rec      = expression(paste(pHI[0])),
+        uHI0_rec      = expression(paste(uHI[0])),
+        pSI0_rec      = expression(paste(pSI[0])),
+        uSI0_rec      = expression(paste(uSI[0])),
+        upi_rec       = expression(paste(u[pi])),
+        w0_rec        = expression(paste(w[0])),
+        wHI_rec       = expression(paste(w[HI])),
+        wSI_rec       = expression(paste(w[SI])),
+        eta_rec       = expression(paste(eta))
   )) + theme_tq()
 
   likelihoodplot <- ggplot(x %>%

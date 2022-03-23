@@ -10,7 +10,7 @@ editor_options:
 
 ## Load Files and packages
 
-```{r load files and packages, echo = F}
+```{r load files and packages, echo = F, message=FALSE, warning = FALSE, results='hide'}
 
 rm(list = ls())
 
@@ -33,7 +33,7 @@ The anatomy of the HISI model.
 
 ## Here is the model
 
-```{r}
+```{r, message=FALSE, warning = FALSE, results='hide'}
 
 # Give it some fake decisions from a partner
 data = data.frame(ret = c(sample(c(0.5, 0), 10, replace = T, prob = c(0.8, 0.2)),
@@ -56,7 +56,7 @@ xy$policy
 
 An anatomy of the HISI model wrapper: NB not intended for running
 
-```{r, results='hide'}
+```{r, message=FALSE, warning = FALSE, results='hide'}
 
 simulatedata_HISI(
 
@@ -98,7 +98,7 @@ participants to play 2 'types' of partner, and the function will
 simulate each presented order (i.e., fair -> unfair, and unfair ->
 fair).
 
-```{r, echo = F}
+```{r, echo = F, message=FALSE, warning = FALSE, results='hide'}
 
 simulatedata_HISI(x = 'pHI0', values = 10, samples = 100, trials = 10, partners = 2, plot = 1, upi = 0.9)
 
@@ -107,7 +107,7 @@ simulatedata_HISI(x = 'pHI0', values = 10, samples = 100, trials = 10, partners 
 Here I am asking for the same but I only want to save the data without
 plotting
 
-```{r}
+```{r, echo = F, message=FALSE, warning = FALSE, results='hide'}
 
 mytestdata <- simulatedata_HISI(x = 'pHI0', values = 10, samples = 100, trials = 10, partners = 2, plot = 0)
 mytestdata
@@ -119,7 +119,7 @@ they'll be giving the participants randomly fair or unfair outcomes. I
 am also setting the uHI0 parameter to 5 while I sweep through pHI0
 values
 
-```{r}
+```{r, echo = F, message=FALSE, warning = FALSE, results='hide'}
 
 simulatedata_HISI(x = 'upi01', 
                   values = 10, 
@@ -133,9 +133,9 @@ simulatedata_HISI(x = 'upi01',
 
 Finally I want to simulate three different partners, but with specific parameters set
 
-```{r}
+```{r, echo = F, message=FALSE, warning = FALSE, results='hide'}
 
-simulatedata_HISI(x = 'pHI0', values = 10, samples = 50, trials = 50, partners = 3, plot = 1,
+simulatedata_HISI(x = 'pHI0', values = 10, samples = 50, trials = 50, partners = 2, plot = 1,
                   uHI0 = 2,
                   pSI0 = 0.3,
                   uSI0 = 2,
@@ -157,7 +157,7 @@ This uses weak regularizing priors over the optimizer, providing Maximum
 A-Priori estimation. The optimiser used 'DEoptim' - a differential evolution
 algorithm, which behaves a little like expectation maximisation algorithms.
 
-```{r Recovery}
+```{r Recovery, echo = F, message=FALSE, warning = FALSE}
 
 cores = 4
 RecoverModel_HISI(
@@ -196,7 +196,7 @@ Please get in touch if you'd like to help with this!
 
 ## Fit model to data using MAP appoximation
 
-```{r}
+```{r, echo = F, results='hide', message=FALSE, warning = FALSE}
 
 load('ExampleData.Rdata')
  
