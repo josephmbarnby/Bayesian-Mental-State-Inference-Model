@@ -25,7 +25,7 @@ White nodes represent free parameters of the model. Grey shaded nodesrepresent n
 
 #### Simulate some data
 
-Sweep through a series of values of one parameters to assess it's contribution to attributional dynamics
+Sweep through a series of values of one parameters to assess it's contribution to attributional dynamics. This is a very useful function to generate some formal predictions for how the model might perform under certain conditions.
 
 ```{r}
 simulatedata_HISI(x = 'pHI0', values = 10, samples = 100, trials = 10, partners = 2, plot = 1)
@@ -41,7 +41,7 @@ Alternatively, set parameters to be specific values
 simulatedata_HISI(x = 'pHI0', values = 10, samples = 100, trials = 50, partners = 2, plot = 1,
                   uHI0 = 2, pSI0 = 0.3, uSI0 = 2, upi  = 0.9, w0   = -1, wHI  = 0.5, wSI  = 0.5, eta  = 1)
 ```
-Here, we've simulated 10 different values of pHI0, each with 100 synthetic participants, over 50 trials with 2 partners.
+Here, we've simulated 10 different values of pHI0, each with 100 synthetic participants, over 50 trials with 2 partners. I have additionally set some parameters to change from their default values.
 
 ![Schematic](ExampleStills/Simulation2.png)
 
@@ -60,6 +60,9 @@ RecoverModel_HISI(
   n_cores = cores
 )
 ```
+
+This correlation matrix demonstrates the correlation between the ground-truth parameters used to simulate data, and the recovered parameters approximated from MAP estimation.
+
 ![Schematic](ExampleStills/Recovery.png)
 
 ### Fitting some data
@@ -93,4 +96,10 @@ Fitted_Values[[2]] # This is the simulated data using the parameters from Fitted
 Fitted_Values[[3]] # These are the plots to check the parameter approximation and overall model fit
 
 ```
+
+The output of this function shows (in addition to the raw data):
+- (A) Distribution of individually fitted parameters from the data
+- (B) Distribution of the loglikelihood values for each participant (which demonstrates model fit). NB: If the model was simply 'guessing' without any explanatory power, we would expect the loglikelihood values to cluster around -87.88 (the vertical solid line on the plot). This line will change depending on the amount of trials - for example - for 100 trials the loglikelihood of a randomly performing model would be -439.44.
+- (C) The simulated (solid black line) and real data (dotted line with coloured ribbon) for harmful intent (orange) and self interest (purple). This is important to quantify the generative performance of the model on your data and assess whether it can accurately reproduce the real behavioural results, thereby demonstrating generative validity (Palminteri et al., 2017).
+
 ![Schematic](ExampleStills/Fitting.png)
