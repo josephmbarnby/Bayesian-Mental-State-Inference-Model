@@ -21,7 +21,7 @@ Currently in development:
 
 White nodes represent free parameters of the model. Grey shaded nodesrepresent numerical probability matrices built from free parameters. Thick solid and thick dotted lines represent transitions between trials. Thin solid lines represent the causal influence of a nodeon another node or variable. The agent or participant updates their initial beliefs (starting prior) about the partner’s intentions [p(HI, SI)_t=0] each trial using their policy matrix of the partner [pi] which maps the likelihood between a partner’s return to the participant and the partner’s true intentions. We assume that upon detecting a change (e.g. a reversal or a new participant), participants re-set their beliefs, using their priors about people in general (thin dotted line), biased by what they have learnt already about their present partner [eta]. Both the policy matrix and initial beliefs about the partner are numerical matrices that assigned probabilities to each grid point of values of harmful intent (0-1) and self-interest (0-1). The model can be used to simulate observed attributions of intent given a series of returns, or inverted to infer the parameter values for participants, using experimentally observed attributions.
 
-## Brief overview of functions
+## Brief overview of the functions in the tutorial script
 
 #### Simulate some data
 
