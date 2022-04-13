@@ -189,6 +189,24 @@ infHISIll_20d <- function(parms,d,details=0,plots=0,sim_only=1,tn = 10,phase = 2
       library(tidyquant)
       library(ggplot2)
       library(patchwork)
+      shift_df <- data.frame(HIstart = colSums(llout$policy[,,1]),
+                SIstart = rowSums(llout$policy[,,1]),
+                HIend = colSums(llout$policy[,,(tn*phase)+1]),
+                SIend = rowSums(llout$policy[,,(tn*phase)+1]),
+                res = 1:9)
+      policy_change <- ggplot(shift_df %>%
+                                pivot_longer(HIstart:SIend, 'policy', values_to = 'probability') %>%
+                                mutate(facet = c(rep(c(1,2,1,2), 9))),
+                              aes(res/10, probability, fill = policy))+
+        geom_col(position = position_dodge())+
+        labs(x = 'Attribution', y = 'Probability')+
+        scale_fill_manual(values = c('#A31621', '#DB222A', '#1F7A8C', '#BFDBF7'), name = "")+
+        facet_wrap(~facet)+
+        theme_tq()+
+        theme(plot.background = element_blank(),
+              legend.position = 'bottom',
+              legend.direction = 'horizontal',
+              strip.background = element_blank())
       initial_policy <- pi[,,1] %>%
         as.data.frame() %>%
         mutate(SI = c(0.05, 0.15, 0.25, 0.35, 0.45, 0.55, 0.65, 0.75, 0.85)) %>%
@@ -232,7 +250,7 @@ infHISIll_20d <- function(parms,d,details=0,plots=0,sim_only=1,tn = 10,phase = 2
         geom_vline(xintercept = -4.17)+
         labs(x = 'Trial-wise LL', y = 'Density')+
         theme_tq()
-      plotter <- (trial_wise | (initial_policy/fitness)) + plot_annotation(tag_levels = 'A')
+      plotter <- (trial_wise | (initial_policy/policy_change)) + plot_annotation(tag_levels = 'A')
       llout[[6]] <- plotter
     }
 
