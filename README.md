@@ -3,7 +3,7 @@ Model tutorial and code for the Bayesian Attributional Inference model reported 
 
 Natively the model runs off any game theoretic set up where the partner (the agent) makes one of two actions (e.g. fair or unfair split of money) and the participant (the subject) attributes some form of intentional stance to their partner. In our work we have opted for harmful intent attributions (the belief that the partner is actively trying to reduce the participants money) and self interest attributions (the belief that the partner is just interested in maximising their own reward irrespective of the participant).
 
-Theoretically, allows shallow Depth of Mentalisation (sDoM) estimation of the participant's beliefs (Barnby et al., 2023; Trends in Cognitive Sciences) - that is, their belief given the observed history of their partner without any extra forward planning. 
+This model allows shallow Depth of Mentalisation (sDoM) estimation of the participant's beliefs (Barnby et al., 2023; Trends in Cognitive Sciences) - that is, their belief given the observed history of their partner without any extra forward planning. 
 
 Papers using this model: 
 
