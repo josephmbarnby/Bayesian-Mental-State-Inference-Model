@@ -4,7 +4,7 @@ Model tutorial and code for the Bayesian Attributional Inference model reported 
     <a href="https://twitter.com/intent/follow?screen_name=joebarnby">
         <img src="https://badgen.net/badge/icon/twitter?icon=twitter&label"
             alt="follow on Twitter"></a>
-<p>
+    <a>
         <img src="https://badgen.net/badge/:Release/:V1.02/:red?icon=github"
             alt="follow on Twitter"></a>
 </p>
