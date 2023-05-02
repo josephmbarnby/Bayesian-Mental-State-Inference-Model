@@ -5,10 +5,10 @@ Model tutorial and code for the Bayesian Attributional Inference model reported 
         <img src="https://badgen.net/badge/icon/twitter?icon=twitter&label"
             alt="follow on Twitter"></a>
     <a>
-        <img src="https://badgen.net/badge/:Release/:V1.02/:red?icon=github"
+        <img src="https://badgen.net/badge/:Release/:V1.02/:red?icon=release"
             alt="Release"></a>
     <a>
-        <img src="https://badgen.net/badge/:Checks/:Succcess/:green?icon=github"
+        <img src="https://badgen.net/badge/:Checks/:Succcess/:green?icon=tick"
             alt="Checks"></a>         
     <a>
         <img src="https://badgen.net/gitlab/last-commit/gitlab-org/gitlab-development-kit"
