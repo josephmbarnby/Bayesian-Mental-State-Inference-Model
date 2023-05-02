@@ -6,7 +6,13 @@ Model tutorial and code for the Bayesian Attributional Inference model reported 
             alt="follow on Twitter"></a>
     <a>
         <img src="https://badgen.net/badge/:Release/:V1.02/:red?icon=github"
-            alt="follow on Twitter"></a>
+            alt="Release"></a>
+    <a>
+        <img src="https://badgen.net/badge/:Checks/:Succcess/:green?icon=github"
+            alt="Checks"></a>    
+    <a>
+        <img src="https://badgen.net/gitlab/last-commit/gitlab-org/gitlab-development-kit"
+            alt="Commit"></a>       
 </p>
 Natively the model runs off any game theoretic set up where the partner (the agent) makes one of two actions (e.g. fair or unfair split of money) and the participant (the subject) attributes some form of intentional stance to their partner. In our work we have opted for harmful intent attributions (the belief that the partner is actively trying to reduce the participants money) and self interest attributions (the belief that the partner is just interested in maximising their own reward irrespective of the participant).
 
