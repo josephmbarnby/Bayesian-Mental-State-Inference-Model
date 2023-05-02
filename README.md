@@ -8,7 +8,7 @@ Model tutorial and code for the Bayesian Attributional Inference model reported 
         <img src="https://badgen.net/badge/icon/mastodon?icon=mastodon&label"
             alt="follow on Mastodon"></a>    
     <a>
-        <img src="https://badgen.net/badge/:Release/:V1.02/:red?icon=release"
+        <img src="https://badgen.net/badge/:Release/:V1.02/:red?icon="
             alt="Release"></a>
     <a>
         <img src="https://badgen.net/badge/:Checks/:Succcess/:green?icon="
