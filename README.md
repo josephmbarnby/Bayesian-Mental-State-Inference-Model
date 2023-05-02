@@ -5,6 +5,8 @@ Natively the model runs off any game theoretic set up where the partner (the age
 
 This model allows shallow Depth of Mentalisation (sDoM) estimation of the participant's beliefs (Barnby et al., 2023; Trends in Cognitive Sciences) - that is, their belief given the observed history of their partner without any extra forward planning. 
 
+You can play with the model in an interactive environment [here](https://soccrlab.shinyapps.io/MentalStateInferenceModel/)
+
 Papers using this model: 
 
 1. https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008372
