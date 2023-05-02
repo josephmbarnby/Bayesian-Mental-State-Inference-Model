@@ -8,14 +8,16 @@ Model tutorial and code for the Bayesian Attributional Inference model reported 
         <img src="https://badgen.net/badge/icon/mastodon?icon=mastodon&label"
             alt="follow on Mastodon"></a>    
     <a>
-        <img src="https://badgen.net/badge/:Release/:V1.02/:red?icon="
+        <img src="https://badgen.net/badge/Release/:V1.02/red?icon="
             alt="Release"></a>
     <a>
-        <img src="https://badgen.net/badge/:Checks/:Succcess/:green?icon="
-            alt="Checks"></a>         
-    <a>
-        <img src="https://badgen.net/gitlab/last-commit/gitlab-org/gitlab-development-kit"
-            alt="Commit"></a>     
+        <img src="https://badgen.net/badge/Checks/Success/green?icon="
+            alt="Checks"></a>   
+</p>
+<p>  
+    <a href="https://soccrlab.shinyapps.io/MentalStateInferenceModel/">
+        <img src="https://badgen.net/badge/Interactive Model/Click Here/orange?icon="
+            alt="Access the Model"></a>    
 </p>
 Natively the model runs off any game theoretic set up where the partner (the agent) makes one of two actions (e.g. fair or unfair split of money) and the participant (the subject) attributes some form of intentional stance to their partner. In our work we have opted for harmful intent attributions (the belief that the partner is actively trying to reduce the participants money) and self interest attributions (the belief that the partner is just interested in maximising their own reward irrespective of the participant).
 
