@@ -4,11 +4,14 @@ Model tutorial and code for the Bayesian Attributional Inference model reported 
     <a href="https://twitter.com/intent/follow?screen_name=joebarnby">
         <img src="https://badgen.net/badge/icon/twitter?icon=twitter&label"
             alt="follow on Twitter"></a>
+    <a href="https://mastodon.online/@JoeBarnby">
+        <img src="https://badgen.net/badge/icon/mastodon?icon=mastodon&label"
+            alt="follow on Mastodon"></a>    
     <a>
         <img src="https://badgen.net/badge/:Release/:V1.02/:red?icon=release"
             alt="Release"></a>
     <a>
-        <img src="https://badgen.net/badge/:Checks/:Succcess/:green?icon=tick"
+        <img src="https://badgen.net/badge/:Checks/:Succcess/:green?icon="
             alt="Checks"></a>         
     <a>
         <img src="https://badgen.net/gitlab/last-commit/gitlab-org/gitlab-development-kit"
