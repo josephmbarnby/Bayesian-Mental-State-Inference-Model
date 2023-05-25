@@ -1,5 +1,5 @@
 # Bayes-Belief Mental State Attribution Model
-Model tutorial and code for the Bayesian Attributional Inference model reported in Barnby et al., (2020) &amp; Barnby et al., (2022). Software developed by Joe Barnby (Royal Holloway, University of London) & Michael Moutoussis (University College London).
+Model tutorial and code for the Bayesian Attributional Inference model reported in Barnby et al., (2020; 2022; 2023) & Moutoussis et al., (2023). Software developed by Joe Barnby (Royal Holloway, University of London) & Michael Moutoussis (University College London).
 <p>
     <a href="https://twitter.com/intent/follow?screen_name=joebarnby">
         <img src="https://badgen.net/badge/icon/twitter?icon=twitter&label"
@@ -29,6 +29,8 @@ Papers using this model:
 
 1. https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008372
 2. https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1010326
+3. https://www.biorxiv.org/content/10.1101/2023.05.02.539031v3
+4. https://www.biorxiv.org/content/10.1101/2023.05.20.541280v1
 
 Just load in the tutorial and toolkit into your favourite IDE and click through the examples :) 
 
