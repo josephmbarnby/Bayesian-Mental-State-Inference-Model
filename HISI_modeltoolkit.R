@@ -10,7 +10,7 @@ library(ggcorrplot)
 ### Dictator_Reversal_Functions.R ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-infHISIll_20d <- function(parms,d,details=0,plots=0,sim_only=1,tn = 10,phase = 2) {
+infHISIll_20d <- function(parms,d,details=0,plots=0,sim_only=1,tn = 10,phase = 2,type='Default') {
 
   d <- as.matrix(d)
 
@@ -20,80 +20,76 @@ infHISIll_20d <- function(parms,d,details=0,plots=0,sim_only=1,tn = 10,phase = 2
   tn    = length(d[,1])/phase
   }
 
-  phase = phase;  # number or partners or phases
+    phase = phase;  # number or partners or phases
 
   Nb = 9;     # number of bins for each personality dim.
   Nf = 9;     # 'full' number of action bins (within which density is flat) for detailed sim work
   Na = 2;     # actual number of actions from a partner
 
-  # i.e. proportions that may be received by the Other.
-  # In general will be set to Nb.
-
-  #   Prior beliefs of the pt ** about the population **
-  #   Prior beliefs about greed on its own, and malice on its own:
-  PSI0 = noisyBino(parms[3], parms[4],Nb); PHI0 = noisyBino(parms[1],parms[2],Nb);
-  # In this version, these baseline beliefs are considered as independent,
-  # so a simple matrix multiplication gives the joint:
-  PSIHI0 = PSI0 %*% t(PHI0);
+  #Parameters by type
+  if(type == 'Default'){
+    #   Prior beliefs of the pt ** about the population **
+    PSI0 = noisyBino(parms[3],parms[4],Nb);
+    PHI0 = noisyBino(parms[1],parms[2],Nb);
+    PSIHI0 = PSI0 %*% t(PHI0);
+    #Policy
+    upi = parms[5];
+    w0  = parms[6];
+    whi = parms[7];
+    wsi = parms[8];
+      if (length(parms) == 9){eta = parms[9]}else{eta=1}
+  } else if(type == 'One Uncertainty'){
+    #Prior
+    PSI0 = noisyBino(parms[2],parms[3],Nb);
+    PHI0 = noisyBino(parms[1],parms[3],Nb);
+    PSIHI0 = PSI0 %*% t(PHI0);
+    #Policy
+    upi = parms[4];
+    w0  = parms[5];
+    whi = parms[6];
+    wsi = parms[7];
+      if (length(parms) == 8){eta = parms[8]}else{eta=1}
+  } else if(type == 'One Likelihood'){
+    #Prior
+    PSI0 = noisyBino(parms[3],parms[4],Nb);
+    PHI0 = noisyBino(parms[1],parms[2],Nb);
+    PSIHI0 = PSI0 %*% t(PHI0);
+    #Policy
+    upi   = parms[5];
+    w0    = parms[6];
+    wsihi = parms[7];
+      if (length(parms) == 8){eta = parms[8]}else{eta=1}
+  } else{
+  error("Type must be one of 'Default', 'One Liklihood', or 'One Uncertainty'")
+  }
 
   if (plots){
     opar=par()
     anames = c('selfish','fair')
   }
 
-  # Now to formulate the policies. There is one individual parameter
-  # here, which determines the uncertainty with which say a high-HI person will
-  # indeed choose the action most fitting to their type (i.e., keep everything),
-  # or will show choices more variable over options:
-  upi = parms[5];     # convenience copy of policy variability (inverse precision)
-  w0  = parms[6];     # This and two next will help map HI, SI onto policy (zero or half return)
-  whi = parms[7];
-  wsi = parms[8];
-
-  if ((whi < 0) || (wsi < 0)){
-    print('Params c(pHI0,uHI0,pSI0,uSI0,upi,w0,whi,wsi,etaHI (or single one), (optionally etaSI)) :')
-    print(parms)
-    error("whi,wsi must all be non-negative")
-  }
-
-  if (length(parms) == 8){
-  etaHI = 1
-  etaSI = 1
-  } else if (length(parms) == 9){
-  eta = parms[9];
-  } else if (length(parms) == 10){
-  etaHI = parms[9];
-  etaSI = parms[10]
-  }
-
   err =0.02/(Nb*Nb) # arbitrary lapse-rate-like
-  #}
-  # param; Note scaling by the number of attribution states considered.
-
-  # Set up the map between 'attributes' and actions :
   pi  = array(NA,c(Nb,Nb,Na));
 
   offs = (Nb+1)/2
   for (SI in 1:Nb){
     for (HI in 1:Nb){
-      pi[SI,HI,1]  = invlogit(w0  + (wsi*(SI-offs)) + (whi*(HI-offs)))  # prob. of ufair offer goes up w. HI, SI
-      # the offs is to center at (usually) 5
+
+        if(type == 'One Likelihood'){
+        x = w0  + (wsihi*(SI-offs)) + (wsihi*(HI-offs))
+        } else {
+        x = w0  + (wsi*(SI-offs)) + (whi*(HI-offs))
+        }
+
+      pi[SI,HI,1]  = 1/(1+exp(-x))
       pi[SI,HI,2]  = 1 - pi[SI,HI,1]
     }
   }
 
   ### Run the inference
 
-  # Here the posterior of one trial will form the prior for the next trial,
-  # staring from the population prior beliefs PSIHI0.
-  #
-
   sll = 0;
   pri0 = PSIHI0; # prior at the very start of encounter with 'partner'.
-  # Construct an output/results object, which is just the sum log lik
-  # if details==0. If not, record trial-by-trial data, attributions,
-  # prob. of data given params (likelihood), log-lik, most likely attrib given
-  # the parameters and data, and also a set of simulated data (incl. decision variability)
 
   if (details ){
     llout = list();
@@ -101,8 +97,8 @@ infHISIll_20d <- function(parms,d,details=0,plots=0,sim_only=1,tn = 10,phase = 2
     llout[[1]]=0;
 
     # [[2]] is the parameter vector
-    hd <- c('pHI0','uHI0','pSI0','uSI0','upi','w0', 'wHI', 'wSI', 'etaHI','etaSI', 'err')
-    llout[[2]] = c(parms[1:10],err);  names(llout[[2]]) <- hd;
+    hd <- c('pHI0','uHI0','pSI0','uSI0','upi','w0', 'wHI', 'wSI', 'eta', 'err')
+    llout[[2]] = c(parms[1:9],err);  names(llout[[2]]) <- hd;
 
     # [[3]] is the detailed evolution, evo:
     llout[[3]] = matrix(NA,tn*phase+1,10);
@@ -124,7 +120,6 @@ infHISIll_20d <- function(parms,d,details=0,plots=0,sim_only=1,tn = 10,phase = 2
     post <- pri0; # this is the belief that will be updated with each trial
 
     # rows to be processed and convenience copies of other's actions,
-    # malice and greed attributions:
     ro = 1:(phase*tn); # rows of data matrix
     as = d[ro,1];  aind = round((Na-1)*as+1)
     hi = d[ro,2];  hind = round((Nb-1)*hi+1)
@@ -132,29 +127,13 @@ infHISIll_20d <- function(parms,d,details=0,plots=0,sim_only=1,tn = 10,phase = 2
 
     for (t in 1:(tn*phase)){  # loop
 
-      #if(plots){
-      #  heatmap(log(post),Rowv=NA, Colv=NA, col = heat.colors(128), scale="none",
-      #          margins=c(4,8),asp=1,labRow=0:(Nb-1),labCol=0:(Nb-1),
-      #          main = paste('\n lnPost. at start of trial ',t),xlab='HI',ylab='SI')
-      #}
-
-
-      if (t == (tn+1) & length(parms)==9){
+      if (t == (tn+1) | t == (tn*2)+1 | t == (tn*3)+1){
 
         post = (pri0 * (1-eta)) + (post * eta);
-
-      } else if (t == (tn+1) & length(parms)==10) {
-
-        PSIPost <- rowSums(post);
-        PHIPost <- colSums(post);
-        post    <- ((PSI0 * (1-etaSI)) + (etaSI * PSIPost)) %*% t((PHI0 * (1-etaHI)) + (etaHI * PHIPost))        ;
 
       }
 
       pri = post;              # new prior is last posterior
-
-      # In the next line, the pt. uses the pi entry as likelihood, pri as prior,
-      # over the character of the partner. This post is their post. beliefs
       post = pi[,,aind[t]] * pri
       post = post / sum(as.vector(post))  # Bayes
 
@@ -254,14 +233,7 @@ infHISIll_20d <- function(parms,d,details=0,plots=0,sim_only=1,tn = 10,phase = 2
       llout[[6]] <- plotter
     }
 
-    #if (plots) {
-    #  heatmap(log(post),Rowv=NA, Colv=NA, col = heat.colors(128), scale="none",
-    #          margins=c(4,8),asp=1,labRow=0:(Nb-1),labCol=0:(Nb-1),
-    #          main = paste('\n lnPost. after triall ',t),xlab='HI',ylab='SI')
-    #  par(opar)  # restore state of graphics where we found it.
-    #}
-
-  if (details ){llout$sll <- sll} else {llout <- sll}
+  if (details){llout$sll <- sll} else {llout <- sll}
   return(llout)
 
 }
@@ -514,10 +486,10 @@ RecoverModel_HISI <- function(variations = 100,
         uHI0 <- round(mysamp(1, 2, 2, 0, 8, 1000), 2)
         pSI0 <- round(mysamp(1, 0.5, 0.2, 0, 1, 1000), 2)
         uSI0 <- round(mysamp(1, 2, 2, 0, 8, 1000), 2)
-        upi  <- round(mysamp(1, 2, 2, 0, 1, 1000), 2)
+        upi  <- round(mysamp(1, 2, 2, 0, 10, 1000), 2)
         w0   <- round(mysamp(1, 0, 2, -10, 10, 1000), 2)
-        wHI  <- round(mysamp(1, 1, 2, 0, 1, 1000), 2)
-        wSI  <- round(mysamp(1, 1, 2, 0, 1, 1000), 2)
+        wHI  <- round(mysamp(1, 1, 2, 0, 10, 1000), 2)
+        wSI  <- round(mysamp(1, 1, 2, 0, 10, 1000), 2)
         eta  <- round(mysamp(1, 0.5, 0.2, 0, 1, 1000), 2)
 
         simulated <- simulatedata_HISI(x = 'none', values=1, samples=1, trials=trials, partners=partners, partner_type,
